@@ -2,16 +2,22 @@ const process =  require('process');
 const express =  require('express');
 const path =  require('path');
 const bodyParser = require('body-parser');
-const ejs = require('ejs');
+const lessMiddleware = require('less-middleware');
+// const ejs = require('ejs');
+
+
 const router = require('./router');
 
-
 let app = express()
+
+
+// 设置静态文件路径
+app.use(express.static(path.join(__dirname, 'public')));
 
 // 模板开始
 //设置视图根目录
 //设置视图格式（本人不太喜欢用jade，接下来会交大家使用html格式的文件）
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', __dirname + '/views');
 // app.engine("html", ejs.renderFile);
 app.set('view engine', 'ejs');
 
@@ -22,8 +28,11 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
-// 设置静态文件路径
-app.use(express.static(path.join(__dirname, 'public')));
+// 引进 less 中间件
+app.use(lessMiddleware('.less', {
+  dest: '.css',
+  pathRoot: path.join(__dirname, 'public')
+}))
 
 // 加载路由
 app.use(router)

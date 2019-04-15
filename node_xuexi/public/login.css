@@ -1,0 +1,10 @@
+
+.box {
+  color: #409EFF;
+}
+.buttons {
+  padding: 5px 10px;
+  display: block;
+  border: none;
+  color: red;
+}
