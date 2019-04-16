@@ -23,7 +23,6 @@ router.get('/login', (require, res) =>{
     name: require.query.name,
     pass: require.query.password
   }
-  console.log(obj)
   res.send(obj);
 })
 
