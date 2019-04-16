@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title><%= title %></title>
   <link rel="stylesheet/less" type="text/css" href="login.less"/>
-  <script type="text/javascript" src="less.min.js"></script>
+  <script type="text/javascript" src="js/http.js"></script>
 </head>
 <body>
   <div class="box">
@@ -15,5 +15,17 @@
     <button class="buttons" onclick="add()"> 登 录 </button>
   </div>
 </body>
-<script type="text/javascript" src="a.js"></script>
+<script>
+  const url = 'http://127.0.0.1:8081/ajax'
+  const obj = {
+    name: '肖鸿',
+    pass: 'xh072569'
+  }
+  
+  ajax(url, 'POST', obj).then(res => {
+    console.log('res=', res)
+  }).catch(err => {
+    console.log(err)
+  })
+</script>
 </html>
