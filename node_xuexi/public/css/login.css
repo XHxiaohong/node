@@ -1,6 +1,30 @@
 
+* {
+  margin: 0;
+  padding: 0;
+}
+html,
+body,
+.container {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.container {
+  position: relative;
+  background: url('../images/login-bg.jpg');
+  background-size: 100%;
+}
 .box {
+  top: 30vh;
+  right: 100px;
+  width: 420px;
+  height: 260px;
   color: #409EFF;
+  position: absolute;
+  border-radius: 5px;
+  background: #ffffff86;
 }
 .buttons {
   padding: 5px 10px;

@@ -13,6 +13,7 @@ let app = express()
 
 // 设置静态文件路径
 app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.static(__dirname + 'public'));
 
 // 模板开始
 //设置视图根目录

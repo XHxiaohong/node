@@ -18,6 +18,15 @@ router.get('/jsonp', (require, res) =>{
   res.send(callback);
 })
 
+router.get('/login', (require, res) =>{
+  let obj = {
+    name: require.query.name,
+    pass: require.query.password
+  }
+  console.log(obj)
+  res.send(obj);
+})
+
 router.get('/ajax', (require, res) =>{
   let obj = {
     name: require.query.name,
