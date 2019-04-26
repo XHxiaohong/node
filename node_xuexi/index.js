@@ -5,11 +5,9 @@ const bodyParser = require('body-parser');
 const lessMiddleware = require('less-middleware');
 // const ejs = require('ejs');
 
-
 const router = require('./router');
 
 let app = express()
-
 
 // 设置静态文件路径
 app.use(express.static(path.join(__dirname, 'public')));
@@ -40,6 +38,7 @@ app.use(router)
 
 const host = '127.0.0.1'
 let port = (function() {
+  // 检查启动服务时是否指定端口，若没有则返回默认端口： 8080
   if (typeof (process.argv[2]) !== 'undefined') {
     // @ts-ignore
     if (isNaN(process.argv[2])) {
@@ -53,11 +52,13 @@ let port = (function() {
   }
 })()
 
+const hostPort = `http://${host}:${port}`
 function Server (port, host) {
   let server = app.listen(port, host)
 
   server.on('error', err=>{
     // @ts-ignore
+    // 检查默认端口是否被占用，若占用自动加一
     if (err.code === 'EADDRINUSE') {
       port += 1
       Server(port, host)
@@ -66,9 +67,23 @@ function Server (port, host) {
   
   server.on('listening', () => {
     console.log('服务已启动！')
-    console.log('http://%s:%d', host, port)
+    console.log(hostPort)
   })
 } 
-if (port !== false) {
-  Server(port, host)
-}
+Server(port, host)
+
+router.get('/', (require, res) =>{
+  const url = require.query.url || 'login'
+  const title = require.query.title ||'用户登录'
+  const obj = { title }
+  if (title === '用户登录')
+    obj.hostPort = hostPort
+  res.render(url, obj);
+})
+
+router.post('/', (require, res) =>{
+  const url = require.body.url
+  const title = require.body.title
+
+  res.render(url, {title});
+})

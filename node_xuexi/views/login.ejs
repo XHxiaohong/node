@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title><%= title %></title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    html,
+    body,
+    .container {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .container {
+      position: relative;
+      background: url('/images/login-bg.jpg');
+      background-size: 100%;
+    }
+    .box {
+      top: 45vh;
+      right: 100px;
+      width: 350px;
+      padding-top: 30px;
+      padding-bottom: 40px;
+      padding-left: 50px;
+      position: absolute;
+      border-radius: 5px;
+      background: #ffffff86;
+      color: #222121b0;
+    }
+    .input_bex {
+      margin-top: 40px;
+      margin-bottom: 20px;
+    }
+    .input {
+      width: 200px;
+      height: 30px;
+      border: none;
+      border-radius: 5px;
+      text-indent: 5px;
+      background: #ffffff86;
+    }
+    .txt {
+      width: 50px;
+      display: inline-block;
+    }
+    .radio {
+      width: 15px;
+      height: 15px;
+      margin-top:10px;
+      margin-left:60px;
+    }
+    .buttons {
+      width: 200px;
+      padding: 5px 10px;
+      border: none;
+      margin-top: 20px;
+      margin-left: 50px;
+      border-radius: 5px;
+      color: rgba(65, 63, 63, 0.918);
+      background: rgba(64, 160, 255, 0.678)
+    }
+    .buttons:hover {
+      color: rgba(65, 63, 63, 0.541);
+      background: rgba(64, 160, 255, 1)
+    }
+    .login {
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      font-size: 14px;
+    }
+    .pass {
+      cursor: pointer;
+      font-size: 14px;
+      position: absolute;
+      top: 5px;
+      right: 5px;
+    }
+    .login span {
+      cursor: pointer;
+    }
+    .pass:hover,
+    .login_register {
+      color: rgba(64, 160, 255, 1);
+      font-weight: 400;
+    }
+    .email {
+      margin-top: 10px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <input type="hidden" id="hostPort" value=<%= hostPort %>>
+    <div class="box">
+      <div class="login" onclick="addClass()">
+        <span class="login_register">登录</span>
+        <span>注册</span>
+      </div>
+
+      <span class="pass">忘记密码</span>
+
+      <div class="input_bex">
+        <span class="txt">用户名</span>
+        <input type="text" name="name" id="username" class="input">
+      </div>
+      <div>
+        <span class="txt">密  码</span>
+        <input type="password" id="password" name="password" class="input">
+      </div>
+
+      <div>
+        <input type="checkbox" onchange="change()" id="checkbox" class="radio">显示密码
+      </div> 
+
+      <div class="email">
+        <span class="txt">邮 箱</span>
+        <input type="email" id="password" name="email" id="email" class="input">
+      </div>
+
+      <button class="buttons" id="but" onclick="login(value)"> 登录 </button>
+    </div>
+  </div>
+</body>
+<script type="text/javascript" src="js/http.js"></script>
+<script type="text/javascript" src="js/router.js"></script>
+<script>  
+  const hostPort = document.getElementById('hostPort').value
+  const but = document.getElementById('but')
+  localStorage.setItem('url', hostPort)
+
+  const login = function (rou) {
+    const username = document.getElementById('username').value
+    const password = document.getElementById('password').value
+    const email_ele = document.getElementById('email')
+    const email = email_ele ? email_ele.value : ''
+
+    const url = hostPort + `/${rou}?username=${username}&password=${password}&email=${email}`
+
+    ajax(url, 'GET').then(res => {
+      if (res.msg !== 'SUCCESS') {
+        alert(res.txt)
+      } else {
+        router('/', 'POST', {url: 'home.ejs', title: '这是首页！'})
+      }
+    })
+  }
+
+  const change = function (val) {
+    const pass = document.getElementById('password')
+    const checked = document.getElementById('checkbox').checked
+    pass.type = checked ? 'txt' : 'password'
+  }
+
+  const addClass = function (e) {
+    let ev = e || event
+    let ele = document.getElementsByClassName('login_register')
+    let email = document.getElementsByClassName('email')[0]
+    ele[0].classList.remove('login_register')
+ 
+    if (ev.target.className !== 'login') {
+      let txt = ev.target.innerHTML
+      let strFun = txt == '登录' ? 'login' : 'register'
+
+      email.style.display = txt == '登录' ? 'none' : 'block'
+
+      ev.target.className += 'login_register'
+      but.innerHTML = txt
+      but.onclick = function() {
+        login(strFun)
+      }
+    }
+  }
+  but.onclick = function() {
+    login('login')
+  }
+</script>
+</html>

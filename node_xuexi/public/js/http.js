@@ -3,6 +3,7 @@
 // 封装 jsonp
 const jsonp = function (url, jsonpCallback, success) {
   let script = document.createElement('script');
+
   script.src = url;
   script.async = true;
   script.type = 'text/javaScript';
@@ -12,7 +13,7 @@ const jsonp = function (url, jsonpCallback, success) {
     success && success(data)
   };
 
-  document.appendChild(script)
+  document.body.appendChild(script)
 }
 
 const ajax = function (url, type, data = {}) {
@@ -37,14 +38,16 @@ const ajax = function (url, type, data = {}) {
         return
       }
     };
-
     ajax.send(sendData);
     ajax.onreadystatechange = () => {
       if (ajax.readyState == 4) {
         if (ajax.status == 200) {
           let obj = ajax.response
-          if (typeof obj !== 'object') obj = JSON.parse(obj)
-          resolve(obj)
+
+         if (typeof obj == 'string') {
+            obj = JSON.parse(obj)
+            resolve(obj)
+         }
         } else {
           reject(ajax.response)
         }
