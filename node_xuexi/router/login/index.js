@@ -1,45 +1,92 @@
 const express = require('express');
+const users= require('../../mongodb/user.js');
+const EmailFun = require('../Email');
+
 let router = express.Router();
 
-router.get('/', (require, res) =>{
-  let text = require.query.name
-  res.render('index', { title: text});
-})
+router.get('/register', (require, res) =>{
+  let data = require.query
+  let username = data.username
+  let password = data.password
 
-router.get('/jsonp', (require, res) =>{
+  let obj = new users({ username, password })
 
-  let obj = {
-    name: require.query.name,
-    pass: require.query.pass
-  }
-  let data = JSON.stringify(obj)
-  let callback = `callback(${data})`
-
-  res.send(callback);
+  obj.save((error, docs)=> {
+    if (error) {
+      let obj = {
+        msg: 'ERROR',
+        txt: '注册账号失败,请重新注册!'
+      }
+      res.send(obj);
+      console.log("setUser Error:" + error);
+    } else {
+      let obj = {
+        msg: 'SUCCESS',
+        txt: '注册账号成功,请登录!'
+      }
+      res.send(obj);
+    }
+  })
 })
 
 router.get('/login', (require, res) =>{
-  let obj = {
-    name: require.query.name,
-    pass: require.query.password
-  }
-  res.send(obj);
+  let username = require.query.username
+  let password = require.query.password
+  
+  users.find({username}, (err, docs) => {
+    if (err)
+      console.log('findError:%d', err)
+
+    let obj = {
+      msg: 'ERROR',
+      txt: '当前用户不存在，请注册账号'
+    }
+
+    if (docs.length) {
+      if (password == docs[0].password) {
+        obj.msg = 'SUCCESS'
+        res.send(obj)
+      } else {
+        obj.txt = '用户或密码错误，请重新输入！'
+        res.send(obj)
+      }
+    } else {
+      res.send(obj);
+    }
+  })
 })
 
-router.get('/ajax', (require, res) =>{
-  let obj = {
-    name: require.query.name,
-    pass: require.query.pass
-  }
-  res.json(obj);
+router.get('/seekPass', (require, res) =>{
+  let username = require.query.username
+  let Email = require.query.email
+  
+  users.find({username}, (err, docs) => {
+    if (err)
+      console.log('findError:%d', err)
+
+    let obj = {
+      msg: 'ERROR',
+      txt: '当前用户不存在，请注册账号'
+    }
+
+    if (docs.length) {
+      let email = docs[0].email
+      let password = docs[0].password
+
+      password `亲，你的用户密码是:${password}, 请妥善保管哟！`
+      if (email) {
+        EmailFun(email, password)
+      } else if (Email) {
+        EmailFun(Email, password)
+      } else {
+        obj.txt = '当前用户没有邮箱，请去注册面板输入用户名和邮箱'
+        res.send(obj);
+      }
+    } else {
+      res.send(obj);
+    }
+  })
 })
 
-router.post('/ajax', (require, res) =>{
-  let obj = {
-    name: require.body.name,
-    pass: require.body.pass
-  }
 
-  res.json(obj);
-})
 module.exports = router
