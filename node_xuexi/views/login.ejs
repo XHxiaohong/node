@@ -111,36 +111,50 @@
 
       <div class="input_bex">
         <span class="txt">用户名</span>
-        <input type="text" name="name" id="username" class="input">
+        <input type="text" name="name" class="input">
       </div>
       <div>
         <span class="txt">密  码</span>
-        <input type="password" id="password" name="password" class="input">
+        <input type="password" name="password" class="input">
       </div>
 
+      <div class="email">
+          <span class="txt">邮 箱</span>
+          <input type="email" name="email" class="input">
+      </div>
+      
       <div>
         <input type="checkbox" onchange="change()" id="checkbox" class="radio">显示密码
       </div> 
-
-      <div class="email">
-        <span class="txt">邮 箱</span>
-        <input type="email" id="password" name="email" id="email" class="input">
-      </div>
 
       <button class="buttons" id="but" onclick="login(value)"> 登录 </button>
     </div>
   </div>
 </body>
 <script type="text/javascript" src="js/http.js"></script>
-<script type="text/javascript" src="js/router.js"></script>
+<script type="text/javascript" src="/jquery-1.8.3.min.js"></script>
 <script>
-  const hostPort = document.getElementById('hostPort').value
+  const hostPort = $('#hostPort').val()
   localStorage.setItem('url', hostPort)
 
+
+  const getValue = function () {
+    
+  }
+
+  // 用户注册
+  const register = function () {
+    const username = $('#username').val()
+    const password = $('#password').val()
+    const email_ele = $('#email')
+  }
+
+
+
   const login = function (rou) {
-    const username = document.getElementById('username').value
-    const password = document.getElementById('password').value
-    const email_ele = document.getElementById('email')
+    const username = $('#username').val()
+    const password = $('#password').val()
+    const email_ele = $('#email')
     const email = email_ele ? email_ele.value : ''
 
     const url = hostPort + `/${rou}?username=${username}&password=${password}&email=${email}`
