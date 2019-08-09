@@ -133,9 +133,8 @@
 </body>
 <script type="text/javascript" src="js/http.js"></script>
 <script type="text/javascript" src="js/router.js"></script>
-<script>  
+<script>
   const hostPort = document.getElementById('hostPort').value
-  const but = document.getElementById('but')
   localStorage.setItem('url', hostPort)
 
   const login = function (rou) {
@@ -174,14 +173,14 @@
       email.style.display = txt == '登录' ? 'none' : 'block'
 
       ev.target.className += 'login_register'
+      const but = document.getElementById('but')
       but.innerHTML = txt
-      but.onclick = function() {
-        login(strFun)
-      }
     }
   }
-  but.onclick = function() {
-    login('login')
-  }
+
+
+
+  // 找回密码
+  const seekPass = function (e) {}
 </script>
 </html>

@@ -1,3 +1,4 @@
+// @ts-nocheck
 const process =  require('process');
 const express =  require('express');
 const path =  require('path');
@@ -55,10 +56,7 @@ let port = (function() {
 const hostPort = `http://${host}:${port}`
 function Server (port, host) {
   let server = app.listen(port, host)
-
   server.on('error', err=>{
-    // @ts-ignore
-    // 检查默认端口是否被占用，若占用自动加一
     if (err.code === 'EADDRINUSE') {
       port += 1
       Server(port, host)

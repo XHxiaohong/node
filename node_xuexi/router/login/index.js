@@ -1,3 +1,4 @@
+// @ts-nocheck
 const express = require('express');
 const users= require('../../mongodb/user.js');
 const EmailFun = require('../Email');
@@ -9,23 +10,21 @@ router.get('/register', (require, res) =>{
   let username = data.username
   let password = data.password
 
-  let obj = new users({ username, password })
+  let registerUser = new users({ username, password })
 
-  obj.save((error, docs)=> {
+  registerUser.save((error, docs)=> {
+    let returnData = {}
     if (error) {
-      let obj = {
-        msg: 'ERROR',
-        txt: '注册账号失败,请重新注册!'
-      }
-      res.send(obj);
-      console.log("setUser Error:" + error);
+      returnData.msg = 'ERROR'
+      returnData.txt = '注册账号失败,请重新注册!'
+      console.log('reginter user ERROR: ', error)
     } else {
-      let obj = {
-        msg: 'SUCCESS',
-        txt: '注册账号成功,请登录!'
-      }
-      res.send(obj);
+      returnData.msg = 'SUCCESS'
+      returnData.txt = '注册账号成功,请登录!'
+      console.log('reginter user SUCCESS: ', docs)
     }
+    
+    res.send(returnData);
   })
 })
 
