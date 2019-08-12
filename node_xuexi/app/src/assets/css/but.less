@@ -1,0 +1,42 @@
+// 按钮样式
+
+// 按钮颜色
+@primary: #40a0ff;
+@success: #67C23A;
+@info: #909399;
+@warning: #E6A23C;
+@danger: #F56C6C;
+@primary-hover: #85bbf1;
+@success-hover: rgb(145, 204, 116);
+@info-hover: #b5b8be;
+@warning-hover: rgb(243, 199, 132);
+@danger-hover: rgb(243, 161, 161);
+@border: #d7d9dd;
+
+// 按钮样式
+.but { // 普通按钮
+  padding: 5px;
+  border: 1px solid @border;
+  border-radius: 5px;
+}
+.but:hover {
+  background: rgba(165, 206, 248, 0.829);
+}
+.but {
+  padding: 5px;
+  border: 1px solid @border;
+  border-radius: 5px;
+}
+.but:hover {
+  background: @primary-hover
+}
+
+.primary-but {
+  .but;
+  color: #fff;
+  border: none;
+  background: @primary;
+}
+.primary-but:hover {
+  background: @primary-hover;
+}

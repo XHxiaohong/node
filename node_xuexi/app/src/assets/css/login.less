@@ -1,0 +1,78 @@
+@log-bg: #ffffff6b;
+@log-txt: #222121b0;
+@txt-color: #40a0ff;
+@log-input: #ffffff91;
+
+.login {
+  .container;
+  position: relative;
+  background: url('../images/login-bg.jpg');
+  background-size: 100%;
+}
+.log-box {
+  width: 350px;
+  padding: 10px 0;
+  position: absolute;
+  top: 38vh;
+  right: 120px;
+  background: @log-bg;
+  color: @log-txt;
+}
+.log-title {
+  font-weight: 800;
+  margin-left: 10px;
+}
+.sTitle {
+  color: @txt-color;
+}
+
+.log-input-box {
+  padding-top: 15px;
+  padding-left: 10px;
+}
+
+.log-input-title {
+  width: 56px;
+  display: inline-block;
+  text-align: end;
+  margin-right:5px;
+}
+.log-input {
+  width: 200px;
+  height: 28px;
+  border: none;
+  border-radius: 5px;
+  text-indent: 5px;
+  background: @log-input;
+}
+
+.log-ioc {
+  width: 20px;
+  height: 20px;
+  color: @txt-color;
+  margin-left: -20px 
+}
+
+.log-txt-box {
+  margin-top: 8px; 
+  margin-left: 66px;
+  font-size: 12px;
+}
+.log-txt {
+  cursor: pointer;
+  font-size: 14px;
+}
+.log-txt:hover {
+  color: @txt-color;
+}
+
+.log-but {
+  .primary-but;
+  width: 200px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-left: calc(50% - 105px);
+}
+.log-but:hover {
+  background: @primary-hover;
+}

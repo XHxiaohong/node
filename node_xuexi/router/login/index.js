@@ -5,10 +5,10 @@ const EmailFun = require('../Email');
 
 let router = express.Router();
 
-router.get('/register', (require, res) =>{
-  let data = require.query
-  let username = data.username
-  let password = data.password
+router.post('/register', (require, res) =>{
+  // let data = require.query
+  let username = require.body.username
+  let password = require.body.password
 
   let registerUser = new users({ username, password })
 
@@ -28,13 +28,12 @@ router.get('/register', (require, res) =>{
   })
 })
 
-router.get('/login', (require, res) =>{
-  let username = require.query.username
-  let password = require.query.password
+router.post('/login', (require, res) =>{
+  let username = require.body.username
+  let password = require.body.password
   
   users.find({username}, (err, docs) => {
-    if (err)
-      console.log('findError:%d', err)
+    if (err) console.log('findError:%d', err)
 
     let obj = {
       msg: 'ERROR',
