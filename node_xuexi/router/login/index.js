@@ -1,5 +1,6 @@
 // @ts-nocheck
 const express = require('express');
+const Crypto = require('crypto');
 const users= require('../../mongodb/user.js');
 const EmailFun = require('../Email');
 
@@ -9,22 +10,31 @@ router.post('/register', (require, res) =>{
   // let data = require.query
   let username = require.body.username
   let password = require.body.password
+  let email = require.body.email
 
-  let registerUser = new users({ username, password })
+  users.find({username}, (err, docs) => {
+    if (err) console.log('findError:%d', err)
 
-  registerUser.save((error, docs)=> {
-    let returnData = {}
-    if (error) {
-      returnData.msg = 'ERROR'
-      returnData.txt = '注册账号失败,请重新注册!'
-      console.log('reginter user ERROR: ', error)
-    } else {
-      returnData.msg = 'SUCCESS'
-      returnData.txt = '注册账号成功,请登录!'
-      console.log('reginter user SUCCESS: ', docs)
+    let returnData = {
+      msg: 'ERROR',
+      txt: '当前用户名已存在！'
     }
-    
-    res.send(returnData);
+    if (docs.length) {
+      res.send(returnData)
+    } else {
+      let registerUser = new users({ username, password, email })
+      registerUser.save((error, docs)=> {
+        if (error) {
+          returnData.txt = '注册账号失败,请重新注册!'
+          console.log('reginter user ERROR: ', error)
+        } else {
+          returnData.msg = 'SUCCESS'
+          returnData.txt = '注册账号成功,请登录!'
+          console.log('reginter user SUCCESS: ', docs)
+        }
+        res.send(returnData);
+      })
+    }
   })
 })
 
@@ -35,54 +45,77 @@ router.post('/login', (require, res) =>{
   users.find({username}, (err, docs) => {
     if (err) console.log('findError:%d', err)
 
-    let obj = {
+    let returnData = {
       msg: 'ERROR',
       txt: '当前用户不存在，请注册账号'
     }
 
+    console.log(docs)
     if (docs.length) {
       if (password == docs[0].password) {
-        obj.msg = 'SUCCESS'
-        res.send(obj)
+        returnData.msg = 'SUCCESS'
+        returnData.txt = '用户登录成功！'
       } else {
-        obj.txt = '用户或密码错误，请重新输入！'
-        res.send(obj)
+        returnData.txt = '用户或密码错误，请重新输入！'
       }
-    } else {
-      res.send(obj);
     }
+    res.send(returnData);
   })
 })
 
+
+// 解密
+const CryptoJS = require('crypto-js');
+function decrypt(word, keyStr) {
+  const key = CryptoJS.enc.Utf8.parse("1234123412ABCDEF");  //十六位十六进制数作为密钥
+  const iv = CryptoJS.enc.Utf8.parse('ABCDEF1234123412');   //十六位十六进制数作为密钥偏移量
+
+  let encryptedHexStr = CryptoJS.enc.Hex.parse(word);
+  let srcs = CryptoJS.enc.Base64.stringify(encryptedHexStr);
+  let decrypt = CryptoJS.AES.decrypt(srcs, key, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 });
+  let decryptedStr = decrypt.toString(CryptoJS.enc.Utf8);
+  let str = decryptedStr.toString();
+
+  return str;
+}
+
+
 router.get('/seekPass', (require, res) =>{
   let username = require.query.username
-  let Email = require.query.email
   
   users.find({username}, (err, docs) => {
-    if (err)
-      console.log('findError:%d', err)
-
-    let obj = {
+    if (err) console.log('findError:%d', err)
+    let returnData = {
       msg: 'ERROR',
       txt: '当前用户不存在，请注册账号'
     }
 
     if (docs.length) {
-      let email = docs[0].email
-      let password = docs[0].password
 
-      password `亲，你的用户密码是:${password}, 请妥善保管哟！`
+      let email, password
+      for (let key of docs) {
+        if (key.email) {
+          email = key.email
+          password = decrypt(key.password)
+          break;
+        } else {
+          users.deleteOne(key, function(err, obj) {
+            console.log(err)
+            console.log(obj)
+          })
+        }
+      }
+      password = `亲，你的用户密码是:${password}, 请妥善保管哟！`
+
       if (email) {
         EmailFun(email, password)
-      } else if (Email) {
-        EmailFun(Email, password)
+        returnData.msg = 'SUCCESS'
+        returnData.txt = '邮件已发送，请查收'
       } else {
-        obj.txt = '当前用户没有邮箱，请去注册面板输入用户名和邮箱'
-        res.send(obj);
+        returnData.txt = '没有找到用户邮箱！'
       }
-    } else {
-      res.send(obj);
     }
+    res.send(returnData);
   })
 })
 

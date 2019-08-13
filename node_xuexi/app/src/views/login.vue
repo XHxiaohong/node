@@ -19,7 +19,7 @@
 
       <div class="log-input-box" v-show="!sTitle">
         <span class="log-input-title">确认密码</span>
-        <input :type="[ispass2?'password':'text']" v-model="pass" class="log-input" autocomplete="off">
+        <input :type="[ispass2?'password':'text']" @change="passFun(pass)" v-model="pass" class="log-input" autocomplete="off">
         <i class="log-ioc" @click="ispass2=!ispass2" :class="[ispass2?'xh-icon-yanjing':'xh-icon-yanjing1']"></i>
       </div>
 
@@ -28,9 +28,10 @@
         <input type="email" v-model="form.email" class="log-input" autocomplete="off">
       </div>
 
-      <div class="log-txt-box"><a class="log-txt">忘记密码</a></div>
+      <div class="log-txt-box" @click="seekPass()"><a class="log-txt">忘记密码</a></div>
 
-      <button class="log-but" @click="login()">{{but}}</button>
+      <button class="log-but" v-show="sTitle" @click="login()">{{but}}</button>
+      <button class="log-but" v-show="!sTitle" @click="register()">{{but}}</button>
     </div>
   </div>
 </template>
@@ -56,33 +57,52 @@ export default {
     }
   },
   methods: {
-    login () {
-      let url = `/api/login`
-
-      
+    login () { // 登录
+      let url = `/api/login`  
       let obj = {
         username: this.form.username,
-       password: this.$store.getters.encrypt(this.form.password)
+        password: this.$store.getters.encrypt(this.form.password)
       }
-      console.log(obj)
+      this.$http.post(url, obj).then(res=> {
+        console.log(res, obj)
+        let a = this.$store.getters.decrypt(obj.password)
+        console.log('...................')
+        console.log(a, obj.password)
+      }).catch(err=> {
+        console.log(err)
+      })
+    },
+    register () { // 注册
+      let url = `/api/register`  
+      let obj = {
+        email: this.form.email,
+        username: this.form.username,
+        password: this.$store.getters.encrypt(this.form.password)
+      }
       this.$http.post(url, obj).then(res=> {
         console.log(res, obj)        
       }).catch(err=> {
         console.log(err)
       })
     },
-    register () {
+    seekPass () { // 忘记密码
+      let url = `/api/seekPass?username=${this.form.username}`  
 
-    }
-  },
-  watch: {
-    pass (val) {
+      this.$http.get(url).then(res=> {
+        console.log(res)        
+      }).catch(err=> {
+        console.log(err)
+      })
+    },
+
+    passFun (val) {
       if (val !== this.form.password) {
         this.pass = ''
         this.form.password = ''
       }
     }
-  }
+  },
+  watch: { }
 }
 </script>
 
