@@ -28,11 +28,16 @@
         <input type="email" v-model="form.email" class="log-input" autocomplete="off">
       </div>
 
-      <div class="log-txt-box" @click="seekPass()"><a class="log-txt">忘记密码</a></div>
+      <div class="log-txt-box">
+        <a @click="seekPass()" class="log-txt">忘记密码</a>
+        <a @click="WXLogin()" class="log-txt">微信登录</a>
+      </div>
 
       <button class="log-but" v-show="sTitle" @click="login()">{{but}}</button>
       <button class="log-but" v-show="!sTitle" @click="register()">{{but}}</button>
     </div>
+
+    <div id="WxLogin" class="WxLogin"></div>
   </div>
 </template>
 
@@ -94,7 +99,22 @@ export default {
         console.log(err)
       })
     },
+    WXLogin () {
 
+      // 5cf6433d7ea9eb49579342bed3ce8926
+      console.log(window.WxLogin)
+      var obj = new WxLogin({
+        id:"login_container",//div的id
+        appid: "wx50eeb3d97fe206d9",
+        scope: "",//写死
+        redirect_uri:encodeURI("") ,
+        state: "",
+        style: "black",//二维码黑白风格        
+        //href: "https://某个域名下的css文件"
+      });
+
+      //this.$router.replace('/WxAuth')
+    },
     passFun (val) {
       if (val !== this.form.password) {
         this.pass = ''

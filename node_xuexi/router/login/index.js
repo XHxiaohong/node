@@ -119,5 +119,10 @@ router.get('/seekPass', (require, res) =>{
   })
 })
 
+// 微信扫码登录
+router.grt('/WXLogin', (require, error) => {
+
+})
+
 
 module.exports = router

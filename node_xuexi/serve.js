@@ -76,7 +76,7 @@ router.get('/', (require, res) =>{
   const title = require.query.title ||'用户登录'
   const obj = { title }
   if (title === '用户登录')
-    obj.hostPort = 'http://127.0.0.1:8080'
+  obj.hostPort = 'http://127.0.0.1:8080'
   res.render(url, obj);
 })
 // router.post('/', (require, res) =>{
