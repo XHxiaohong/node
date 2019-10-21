@@ -36,6 +36,8 @@ Vue.use(Router)
 //   }
 // })
 
+// const requireCompoenent = require.context('./views', true, /\.vue$/)
+
 let routers = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
