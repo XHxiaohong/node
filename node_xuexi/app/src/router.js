@@ -35,8 +35,21 @@ Vue.use(Router)
 //     next()
 //   }
 // })
+let components = []
+const requireCompoenent = require.context('./views', true, /\.vue$/)
+requireCompoenent.keys().map(filbPath=> {
+  let filb = requireCompoenent(filbPath)
+  let filbName = filb.default.name
+  let component = './views' + filePath.slice(1)
+  // 创建路由对象
+  let router = {
+    path: '/' + filbName,
+    name: filbName,
+    component: () => import(`${component}`)
+  }
+  components.push(router)
+})
 
-// const requireCompoenent = require.context('./views', true, /\.vue$/)
 
 let routers = new Router({
   mode: 'history',
