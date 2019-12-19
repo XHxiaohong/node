@@ -3,8 +3,7 @@
  *** 给用户集合创建模型
 */
 
-var mongo = require('./index.js'),
-    Schema = mongo.Schema;
+var mongo = require('./index.js');
 
 var user = new mongo.Schema({
   'username': {type: String},
