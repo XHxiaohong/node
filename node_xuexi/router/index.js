@@ -7,7 +7,7 @@ let router = express.Router();
 
 
 let filePathArr = [];
-let filePath = path.join(__dirname, '');
+let filePath = path.join(__dirname, 'modules');
 
 function getFilePath(_path) {
   let listFile = fs.readdirSync(_path);
@@ -31,12 +31,9 @@ function getFilePath(_path) {
 }
 getFilePath(filePath);
 
+filePathArr.map(key=> {
+  router.use(require(key));
+})
 
-
-// router.get('/', (require, res) =>{
-//   res.render('index', { title: 'Express' });
-// })
-
-router.use(require('./login'));
 // 导出路由对象
 module.exports = router

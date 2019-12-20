@@ -19,7 +19,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
  * whitelist 白名单
  * 注意：cors 需要在 router 前挂载
 */
-var whitelist = ['http://localhost:8081', 'http://localhost:8081', 'null']
+var whitelist = ['http://localhost:8081', 'null']
 app.use(cors({
   credentials: true,
   methods: ['GET', 'POST'],
@@ -27,8 +27,8 @@ app.use(cors({
   optionsSuccessStatus: 200,
   origin: (origin, callback) => {
     whitelist.indexOf(origin) != -1
-      ? callback(null, true)
-      : callback(new Error('Not allowed by CORS'));
+     ? callback(null, true)
+     : callback(new Error('Not allowed by CORS'));
   }
 }));
 

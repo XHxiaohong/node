@@ -22,7 +22,7 @@ module.exports =  function (email, txt, emailObj) {
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) { 
         console.log('邮件发送失败：%s', error);
-        resolve('邮件发送失败！')
+        reject('邮件发送失败！')
       } else {
         console.log('邮件已发送: %s', info.messageId);
         resolve('邮件已发送！')
