@@ -115,8 +115,8 @@ router.post('/meun/remove', (require, response)=> {
  *  console.log(err, docs)
  * })
 */
-meuns.remove({}, (err, docs)=> {
-  console.log(err, docs)
-})
+// meuns.remove({}, (err, docs)=> {
+//   console.log(err, docs)
+// })
 
 module.exports = router

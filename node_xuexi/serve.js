@@ -14,6 +14,22 @@ let app = express()
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+// 设置静态文件路径
+// app.set('public', __dirname + '/public');
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(__dirname + 'public'));
+
+/*
+ * 模板开始
+ * 设置视图根目录
+ * 设置视图格式（本人不太喜欢用jade，接下来会交大家使用html格式的文件）
+ */
+const ejs = require('ejs');
+app.set('views', __dirname + '/views');
+app.engine("html", ejs.renderFile);
+app.set('view engine', 'ejs');
+
+
 /*
  * cors 跨域
  * whitelist 白名单
@@ -22,8 +38,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 var whitelist = ['http://localhost:8081', 'null']
 app.use(cors({
   credentials: true,
-  methods: ['GET', 'POST'],
-  alloweHeaders: ['Conten-Type', 'Authorization'],
+  // methods: ['GET', 'POST'],
+  // alloweHeaders: ['Conten-Type', 'Authorization',  ''],
   optionsSuccessStatus: 200,
   origin: (origin, callback) => {
     whitelist.indexOf(origin) != -1
@@ -63,19 +79,6 @@ Server(port, '127.0.0.1')
 // Server(port, host)
 
 
-// 设置静态文件路径
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static(__dirname + 'public'));
-
-// 模板开始
-// 设置视图根目录
-// 设置视图格式（本人不太喜欢用jade，接下来会交大家使用html格式的文件）
-const ejs = require('ejs');
-app.set('views', __dirname + '/views');
-app.engine("html", ejs.renderFile);
-app.set('view engine', 'ejs');
-
-
 app.get('/login', (require, res) => {
   console.log(123);
 })
@@ -85,25 +88,3 @@ app.get('/login', (require, res) => {
 //   const title = require.body.title
 //   res.render(url, {title});
 // })
-
-
-
-// import Vue from 'vue'
-
-// export default {//加密
-//   encrypt(word, keyStr){ 
-//     keyStr = keyStr ? keyStr : 'abcdefgabcdefg12';
-//     var key  = CryptoJS.enc.Utf8.parse(keyStr);//Latin1 w8m31+Yy/Nw6thPsMpO5fg==
-//     var srcs = CryptoJS.enc.Utf8.parse(word);
-//     var encrypted = CryptoJS.AES.encrypt(srcs, key, {mode:CryptoJS.mode.ECB,padding: CryptoJS.pad.Pkcs7});
-//     return encrypted.toString();
-//   },
-//   //解密
-//   decrypt(word, keyStr){  
-//     keyStr = keyStr ? keyStr : 'abcdefgabcdefg12';
-//     var key  = CryptoJS.enc.Utf8.parse(keyStr);//Latin1 w8m31+Yy/Nw6thPsMpO5fg==
-//     var decrypt = CryptoJS.AES.decrypt(word, key, {mode:CryptoJS.mode.ECB,padding: CryptoJS.pad.Pkcs7});
-//     return CryptoJS.enc.Utf8.stringify(decrypt).toString();
-//   }
-
-// }

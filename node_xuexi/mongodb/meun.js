@@ -19,14 +19,6 @@ var meun = new mongo.Schema({
 
 
 meun.statics = {
-  addNumber(id, cb) {
-    this.findOneAndUpdate(
-      { _id: id },
-      { $inc: { length: 1 }   },
-      { new: true  },
-      cb
-    );
-  },
   addMeunID (id, callback) {
     this.findByIdAndUpdate(id ,
       { $inc: { meunID: 1 } },  // 每次自增长1
@@ -38,14 +30,4 @@ meun.statics = {
 
 
 const meuns = mongo.model('meun', meun)
-
-// var entitySchema = mongo.Schema({
-//   testvalue: {type: String}
-// });
-
-meun.pre('save', function (next) {
-  console.log(this, 'pre save')
-  next()
-})
-
 module.exports = meuns
