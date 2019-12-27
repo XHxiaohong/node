@@ -35,13 +35,15 @@ app.set('view engine', 'ejs');
  * whitelist 白名单
  * 注意：cors 需要在 router 前挂载
 */
-var whitelist = ['http://localhost:8081', 'null']
+var whitelist = ['http://localhost:8081', 'http://localhost:8181', 'null']
 app.use(cors({
   credentials: true,
-  // methods: ['GET', 'POST'],
-  // alloweHeaders: ['Conten-Type', 'Authorization',  ''],
+  methods: ['GET', 'POST'],
+  alloweHeaders: ['Conten-Type', 'Authorization'],
   optionsSuccessStatus: 200,
   origin: (origin, callback) => {
+
+    console.log(origin)
     whitelist.indexOf(origin) != -1
      ? callback(null, true)
      : callback(new Error('Not allowed by CORS'));

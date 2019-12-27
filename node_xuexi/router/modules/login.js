@@ -93,5 +93,4 @@ router.post('/retrieve', (require, response) =>{
   })
 })
 
-
 module.exports = router

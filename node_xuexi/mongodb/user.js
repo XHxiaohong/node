@@ -6,9 +6,17 @@
 var mongo = require('./index.js');
 
 var user = new mongo.Schema({
-  'username': {type: String},
-  'password': {type: String},
-  'email': {type: String}
+  'name': { type: String },
+  'username': { type: String },
+  'password': { type: String },
+  'email': { type: String },
+  'date': { type: String },
+  'gender': { type: String },
+  'telephone': { type: String },
+  'imgUrl': { type: String },
+  'role': {type: String, default: '1'},
+  'address': {type: String},
+  'autograph': {type: String}
 })
 
 module.exports = mongo.model('user', user)
