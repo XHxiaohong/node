@@ -31,7 +31,7 @@ router.get('/user/list', (require, response) => {
       console.log('findError:%d', err);
       return response.send(returnData)
     }
-    console.log(docs)
+    // console.log(docs)
     if (!docs.length) return response.send(returnData);
 
     returnData.data = docs;
@@ -63,11 +63,11 @@ router.post('/user/update', (require, respone) => {
   let { ...update } = require.query
 
   let id = '5dfb39d645e19c2b147bb02e';
-  console.log(update)
+  // console.log(update)
   users.updateOne({ _id: id }, { gender: '男' }, (err, docs) => {
     if (err) return console.log(err)
 
-    console.log(docs)
+    // console.log(docs)
     respone.send({ msg: 'success', data: '保存个人信息成功！' })
   })
 });
@@ -100,32 +100,48 @@ router.post('/user/update', (require, respone) => {
 
 
 // 接收上传文件数据
-router.use(express.static('upload'));
+// router.use(express.static('upload'));
+
+// 判断是否是文件上传
+function isFormData (res) {
+  let type = res.headers['content-type'] || '';
+  return type.includes('multipart/form-data');
+}
 
 // 修改头像 /user/uploadImg
 router.post('/user/uploadImg', (require, respone)=> {
+  if (!isFormData(require)) {
+    respone.statusCode = 400;
+    respone.end('错误的请求, 请用multipart/form-data格式上传数据！')
+  }  
 
-  // res.setHeader("Access-Control-Allow-Origin", "*");
-
-
-  console.log('文件上传');
-  console.log(require.body);
-  console.log(require.file);
-  console.log(require.files);
-  console.log('*************************');
+  console.log('*************************文件上传*************************');
 
   var form = new formidable.IncomingForm();
+  form.uploadDir = './public/userImg';
 
   form.parse(require, function(err, fields, files) {
-    console.log(err, fields, files);
-    console.log('是否进入form');
+    if  (err) return console.log(err);
 
-    respone.send({msg: '接收请求'})
+    if (!files.file.type.includes('image')) {
+      respone.statusCode = 400;
+      return respone.end('上传数据错误，请上传图片数据！');
+    } else {
+      
+      let suffix = files.file.name.split('.').pop();
+      let imgName = fields.username + '.' + suffix;
+      let imgPath = '/public/userImg/' + imgName;
+
+      console.log(files.file.name)
+      console.log(imgPath)
+      fs.renameSync(files.file.path, '.' + imgPath);
+
+      respone.send({msg: 'success', text: '修改图像成功！', url: imgPath});
+      users.updateOne({ username: fields.username }, { imgUrl: imgPath }, (err, docs) => {
+        if (err) return console.log(err)
+      })
+    }
   });
-  // require.on('data', (a)=> {
-  //   console.log(a)
-  // })
-  // console.log(require);
 })
 
 module.exports = router;

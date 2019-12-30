@@ -52,6 +52,12 @@ app.use(cors({
 // 加载路由
 app.use(router);
 
+// 请求用户图片
+app.get('/public/userImg/*', function (req, res) {
+  res.sendFile(__dirname + "/" + req.url );
+  console.log("Request for " + req.url + " received.");
+})
+
 // const host = ip.address();
 let port = (function () { // 检查启动服务时是否指定端口，若没有则返回默认端口： 8080
   if (typeof (process.argv[2]) !== 'undefined') {

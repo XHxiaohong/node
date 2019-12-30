@@ -13,7 +13,7 @@ var user = new mongo.Schema({
   'date': { type: String },
   'gender': { type: String },
   'telephone': { type: String },
-  'imgUrl': { type: String },
+  'imgUrl': { type: String, default: '/public/userImg/user.png'},
   'role': {type: String, default: '1'},
   'address': {type: String},
   'autograph': {type: String}
