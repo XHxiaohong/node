@@ -35,18 +35,17 @@ app.set('view engine', 'ejs');
  * whitelist 白名单
  * 注意：cors 需要在 router 前挂载
 */
-var whitelist = ['http://localhost:8081', 'http://localhost:8181', 'null']
+var whitelist = ['http://localhost:8081', 'http://localhost:8181', 'null', undefined]
 app.use(cors({
   credentials: true,
   methods: ['GET', 'POST'],
-  alloweHeaders: ['Conten-Type', 'Authorization'],
+  // alloweHeaders: ['Conten-Type', 'Authorization'],
   optionsSuccessStatus: 200,
   origin: (origin, callback) => {
-
-    console.log(origin)
-    whitelist.indexOf(origin) != -1
-     ? callback(null, true)
-     : callback(new Error('Not allowed by CORS'));
+    console.log(origin, whitelist.includes(origin));
+    whitelist.includes(origin)
+      ? callback(null, true)
+      : callback(new Error('Not allowed by CORS'));
   }
 }));
 
@@ -79,12 +78,6 @@ function Server(port, host) {
 }
 Server(port, '127.0.0.1')
 // Server(port, host)
-
-
-app.get('/login', (require, res) => {
-  console.log(123);
-})
-
 // router.post('/', (require, res) =>{
 //   const url = require.body.url
 //   const title = require.body.title
