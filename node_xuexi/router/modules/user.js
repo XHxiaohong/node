@@ -34,6 +34,7 @@ router.get('/user/list', (require, response) => {
     // console.log(docs)
     if (!docs.length) return response.send(returnData);
 
+    returnData.msg = 'success';
     returnData.data = docs;
     response.send(returnData);
   })
@@ -127,9 +128,9 @@ router.post('/user/uploadImg', (require, respone)=> {
       respone.statusCode = 400;
       return respone.end('上传数据错误，请上传图片数据！');
     } else {
-      
+      let tmie = new Date().getTime()
       let suffix = files.file.name.split('.').pop();
-      let imgName = fields.username + '.' + suffix;
+      let imgName = fields.username + '_' + tmie + '.' + suffix;
       let imgPath = '/public/userImg/' + imgName;
 
       console.log(files.file.name)

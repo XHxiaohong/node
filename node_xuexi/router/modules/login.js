@@ -23,6 +23,7 @@ router.post('/login', (require, response) => {
     if (password == docs[0].password) {
       returnData.msg = 'SUCCESS';
       returnData.text = '登录成功！';
+      returnData.data = docs;
     }
     return response.send(returnData);
   });

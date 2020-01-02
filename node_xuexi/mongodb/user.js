@@ -16,7 +16,8 @@ var user = new mongo.Schema({
   'imgUrl': { type: String, default: '/public/userImg/user.png'},
   'role': {type: String, default: '1'},
   'address': {type: String},
-  'autograph': {type: String}
+  'autograph': {type: String},
+  'birthday': {type: String}
 })
 
 module.exports = mongo.model('user', user)
