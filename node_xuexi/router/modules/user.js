@@ -22,7 +22,8 @@ router.get('/user/list', (require, response) => {
     imgUrl: 1,
     role: 1,
     address: 1,
-    autograph: 1
+    autograph: 1,
+    birthday: 1
   }
   let find = username ? { username } : {};
 
@@ -60,22 +61,19 @@ router.post('/user/email', (require, respone) => {
 
 // 保存用户信息 
 router.post('/user/update', (require, respone) => {
-  // let { ...update } = require.body;
-  let { ...update } = require.query
+  let {id, ...update } = require.body
 
-  let id = '5dfb39d645e19c2b147bb02e';
-  // console.log(update)
-  users.updateOne({ _id: id }, { gender: '男' }, (err, docs) => {
+  console.log(id, update)
+  // respone.send({ msg: 'success', data: '保存个人信息成功！' })
+  users.updateOne({ _id: id }, update, (err, docs) => {
     if (err) return console.log(err)
 
-    // console.log(docs)
     respone.send({ msg: 'success', data: '保存个人信息成功！' })
   })
 });
 
-
 // 修改用户密码
-router.post('/user/update', (require, respone) => {
+router.post('/user/updatePassword', (require, respone) => {
   // let { ...update } = require.body;
   let { id, password } = require.query
 
